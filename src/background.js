@@ -6,7 +6,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 require('update-electron-app')({
   repo: 'kohei-kp/auto-update-sample.git',
-  updateInterval: '1 minutes',
+  updateInterval: '5 minutes',
   logger: require('electron-log')
 })
 
