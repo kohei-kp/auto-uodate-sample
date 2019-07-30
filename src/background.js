@@ -4,7 +4,11 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-require('update-electron-app')()
+require('update-electron-app')({
+  repo: 'kohei-kp/auto-update-sample.git',
+  updateInterval: '1 minutes',
+  logger: require('electron-log')
+})
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
