@@ -128,7 +128,7 @@ autoUpdater.on('update-downloaded', (e, releaseNotes, ReleaseName) => {
       message += note + '\n\n'
     })
   }
-  dialog.showMessageBox(
+  dialog.showMessageBoxSync(
     {
       type: 'question',
       button: ['再起動', 'あとで'],
@@ -145,5 +145,5 @@ autoUpdater.on('update-downloaded', (e, releaseNotes, ReleaseName) => {
 })
 
 app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify()
+  setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 1000 * 60 * 3)
 })
