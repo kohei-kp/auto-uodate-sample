@@ -2,13 +2,14 @@
 
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import log from 'electron-log'
+import { autoUpdater } from 'electron-updater'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-require('update-electron-app')({
-  repo: 'kohei-kp/auto-update-sample.git',
-  updateInterval: '5 minutes',
-  logger: require('electron-log')
-})
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+
+log.info('App Starting...')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -88,3 +89,36 @@ if (isDevelopment) {
     })
   }
 }
+
+// https://github.com/iffy/electron-updater-example/blob/master/main.js
+function sendStatusToWindow(text) {
+  log.info(text)
+  win.webContents.send('message', text)
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...')
+})
+
+autoUpdater.on('update-available', info => {
+  sendStatusToWindow('Update available.')
+})
+
+autoUpdater.on('update-not-available', info => {
+  sendStatusToWindow('Update not available.')
+})
+
+autoUpdater.on('error', err => {
+  sendStatusToWindow('Error in auto-updater.' + err)
+})
+
+autoUpdater.on('download-progress', progressObj => {
+  let logMessage = 'Download speed:' + progressObj.bytesPerSecond
+  logMessage = logMessage + ' - Download ' + progressObj.percent + '%'
+  logMessage = logMessage + '(' + progressObj.transferred + '/' + progressObj.total + ')'
+  sendStatusToWindow(logMessage)
+})
+
+app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify()
+})
