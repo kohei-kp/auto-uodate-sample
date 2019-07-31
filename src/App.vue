@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link>&nbsp;|
       <router-link to="/update1">Update1</router-link>
     </div>
-    <h1>v0.7.0</h1>
+    <h1>v0.9.0</h1>
     <router-view />
   </div>
 </template>

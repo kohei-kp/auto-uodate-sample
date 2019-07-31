@@ -119,14 +119,12 @@ autoUpdater.on('download-progress', progressObj => {
   sendStatusToWindow(logMessage)
 })
 
-autoUpdater.on('update-downloaded', (e, releaseNotes, ReleaseName) => {
-  let message = app.getName() + ' ' + ReleaseName
+autoUpdater.on('update-downloaded', ({ version, files, path, sha512, releaseName, releaseNotes, releaseDate }) => {
+  let message = `${app.getName()} ${version} ${releaseDate}`
 
   if (releaseNotes) {
     message += '\n\n内容\n'
-    releaseNotes.split(/[^\r]\n/).forEach(note => {
-      message += note + '\n\n'
-    })
+    releaseNotes.forEach(note => (message += note + '\n\n'))
   }
   dialog.showMessageBoxSync(
     {
