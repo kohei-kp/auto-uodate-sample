@@ -1,14 +1,7 @@
 {
   "name": "auto-update-sample",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "private": true,
-  "build": {
-    "publish": [{
-      "probider": "github",
-      "owner": "kohei-kp",
-      "repo": "auto-update-sample"
-    }]
-  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, dialog } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
@@ -117,6 +117,31 @@ autoUpdater.on('download-progress', progressObj => {
   logMessage = logMessage + ' - Download ' + progressObj.percent + '%'
   logMessage = logMessage + '(' + progressObj.transferred + '/' + progressObj.total + ')'
   sendStatusToWindow(logMessage)
+})
+
+autoUpdater.on('update-downloaded', (e, releaseNotes, ReleaseName) => {
+  let message = app.getName() + ' ' + ReleaseName
+
+  if (releaseNotes) {
+    message += '\n\n内容\n'
+    releaseNotes.split(/[^\r]\n/).forEach(note => {
+      message += note + '\n\n'
+    })
+  }
+  dialog.showMessageBox(
+    {
+      type: 'question',
+      button: ['再起動', 'あとで'],
+      defaultId: 0,
+      message: '新しいバージョンをダウンロードしました。再起動しますか？',
+      detail: message
+    },
+    res => {
+      if (res === 0) {
+        setTimeout(() => autoUpdater.quitAndInstall(), 1)
+      }
+    }
+  )
 })
 
 app.on('ready', () => {
